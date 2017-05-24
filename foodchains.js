@@ -162,6 +162,7 @@ function imageClickHandler(event) {
 }
 
 function checkButtonHandler() {
+	playSound("click");
 	var correct = true;
 	questionImages.sort(compare);
 	var lastOne = questionImages[0];
