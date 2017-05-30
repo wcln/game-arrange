@@ -248,7 +248,7 @@ function checkButtonHandler() {
 	questionImages.sort(compare);
 	var lastOne = questionImages[0];
 	for (var i = 1; i < questionImages.length; i++) {
-		if (questionImages[i].bitmap.y > lastOne.bitmap.y) {
+		if (questionImages[i].bitmap.y < lastOne.bitmap.y) {
 			correct = false;
 			break;
 		}
