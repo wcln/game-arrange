@@ -14,11 +14,11 @@
  var STAGE_WIDTH;
  var STAGE_HEIGHT;
 
- var IMAGE_WIDTH = 150;
- var IMAGE_HEIGHT = 80;
+ var IMAGE_WIDTH = 180;
+ var IMAGE_HEIGHT = 90;
 
- var BOX_WIDTH = 160;
- var BOX_HEIGHT = 90;
+ var BOX_WIDTH = 220;
+ var BOX_HEIGHT = 115;
 
 
  function init() {
@@ -30,7 +30,6 @@
 	stage = new createjs.Stage("gameCanvas"); // canvas id is gameCanvas
 	stage.mouseEventsEnabled = true;
 	stage.enableMouseOver(); // Default, checks the mouse 20 times/second for hovering cursor changes
-	createjs.Touch.enable(stage); // enable touch interactions if supported
 
 	setupManifest(); // preloadJS
 	startPreload();
@@ -41,58 +40,24 @@
 
  	if (gameStarted) {
 
- 		// var isReady = true;
- 		// for (option of questionImages) {
- 		// 	if (option.bitmap.x < 50 || option.bitmap.x > 200 || option.bitmap.y < 100 || option.bitmap.y > 650) {
- 		// 		isReady = false;
- 		// 	}
- 		// 	for (another of questionImages) {
- 		// 		if (option.id != another.id) {
- 		// 			if (ndgmr.checkRectCollision(another.bitmap, option.bitmap) != null) {
- 		// 				isReady = false;
- 		// 			}
- 		// 		}
- 		// 	}
- 		// }
-
- 		// if (isReady) {
- 		// 	stage.addChild(checkButton);
- 		// 	stage.removeChild(checkButtonDisabled);
- 		// 	gameStarted = false;
- 		// }
-
- 		var isComplete = true;
- 		for (var option of questionImages) {
- 			var isMatched = false;
- 			for (var rect of whiteRectsArray) {
- 				if (ndgmr.checkRectCollision(option.bitmap, rect) != null) {
- 					isMatched = true;
- 					break;
- 				}
+ 		var isReady = true;
+ 		for (option of questionImages) {
+ 			if (option.bitmap.x < 50 || option.bitmap.x > 200 || option.bitmap.y < 100 || option.bitmap.y > 650) {
+ 				isReady = false;
  			}
- 			if (!isMatched) {
- 				isComplete = false;
+ 			for (another of questionImages) {
+ 				if (option.id != another.id) {
+ 					if (ndgmr.checkRectCollision(another.bitmap, option.bitmap) != null) {
+ 						isReady = false;
+ 					}
+ 				}
  			}
  		}
 
- 		if (isComplete) {
- 			for (var option1 of questionImages) {
- 				for (var option2 of questionImages) {
- 					if (option1.id != option2.id) {
- 						if (ndgmr.checkRectCollision(option1.bitmap, option2.bitmap) != null) {
-	 						isComplete = false;
-	 						break;
- 						}
- 					}
-
- 				}
- 			}
-
- 			if (isComplete) {
- 				stage.addChild(checkButton);
- 				stage.removeChild(checkButtonDisabled);
- 				gameStarted = false;
- 			}
+ 		if (isReady) {
+ 			stage.addChild(checkButton);
+ 			stage.removeChild(checkButtonDisabled);
+ 			gameStarted = false;
  		}
  	}
  }
@@ -130,8 +95,8 @@ function initGraphics() {
 	stage.addChild(backgroundImage);
 
 	// check button
-	checkButton.x = 280;
-	checkButton.y = STAGE_HEIGHT - checkButton.getBounds().height - 15;
+	checkButton.x = 300;
+	checkButton.y = STAGE_HEIGHT - checkButton.getBounds().height - 35;
 	checkButtonPressed.x = checkButton.x;
 	checkButtonPressed.y = checkButton.y;
 	checkButtonDisabled.x = checkButton.x;
@@ -154,19 +119,6 @@ function initGraphics() {
 		stage.removeChild(checkButtonPressed);
 	})
 
-	// white rectangles (for snapping)
-	for (var i = 0; i < whiteRectsArray.length; i++) {
-		var rect = whiteRectsArray[i];
-
-		rect.x = 292;
-		rect.y = 190 + (105 * i);
-
-		rect.alpha = 0;
-
-		stage.addChild(rect);	
-
-	}
-
 	// question images
 	shuffle(questionImages);
 	for (var i = 0; i < questionImages.length; i++) {
@@ -176,8 +128,8 @@ function initGraphics() {
 		image.scaleX = IMAGE_WIDTH / image.image.width;
 		image.scaleY = IMAGE_HEIGHT / image.image.height;
 
-		image.x = 100;
-		image.y = 235 + (105*i);
+		image.x = (STAGE_WIDTH/4) * 3;
+		image.y = 200 + (100*i);
 		questionImages[i].originalX = image.x;
 		questionImages[i].originalY = image.y;
 
@@ -189,53 +141,20 @@ function initGraphics() {
 		// listener
 		image.on("pressmove", function(event) {
 			imageClickHandler(event);
-
-		});
-
-		image.on("click", function(event) {
-			imageDropHandler(event);
-		})
-
-
-		image.on("rollover", function(event) {
-			this.scaleX = this.scaleX * 1.1;
-			this.scaleY = this.scaleY * 1.1;
-		});
-
-		image.on("rollout", function(event) {
-			this.scaleX = IMAGE_WIDTH / this.image.width;
-			this.scaleY = IMAGE_HEIGHT / this.image.height;
 		})
 
 		stage.addChild(image);
 	}
 }
 
-function imageDropHandler(event) {
-	for (var rect of whiteRectsArray) {
-		if (ndgmr.checkRectCollision(rect, event.target) != null) {
-			var passed = true;
-			for (var i = 1; i < questionImages.length; i++) {
-				if (ndgmr.checkRectCollision(questionImages[i].bitmap, questionImages[i-1].bitmap) != null) {
-					passed = false;
-				}
-			}
-			if (passed) {
-				event.target.x = rect.x + IMAGE_WIDTH/2 + 5;
-				event.target.y = rect.y + IMAGE_HEIGHT/2 + 5;
-				break;
-			}
-		}
-	}
-}
-
 var lastTime = 0;
 function imageClickHandler(event) {
 
-	if (!gameStarted) {
+	if (!gameStarted && new Date().getTime() - lastTime > 1000) {
 		gameStarted = true;
 		stage.addChild(checkButtonDisabled);
 		stage.removeChild(checkButton);
+		lastTime = new Date().getTime();
 	}
 
 	event.target.x = event.stageX;
@@ -248,7 +167,8 @@ function checkButtonHandler() {
 	questionImages.sort(compare);
 	var lastOne = questionImages[0];
 	for (var i = 1; i < questionImages.length; i++) {
-		if (questionImages[i].bitmap.y > lastOne.bitmap.y) {
+		console.log(lastOne.bitmap.y)
+		if (questionImages[i].bitmap.y < lastOne.bitmap.y) {
 			correct = false;
 			break;
 		}
@@ -275,7 +195,6 @@ var backgroundImage;
 var checkButton, checkButtonPressed, checkButtonDisabled;
 var correctScreen, incorrectScreen;
 var questionImages = [];
-var whiteRectsArray = [];
 
 function setupManifest() {
 	manifest = [
@@ -284,7 +203,7 @@ function setupManifest() {
 			id: "click"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "background.png",
+			src: "images/background.png",
 			id: "background"
 		},
 		{
@@ -304,15 +223,15 @@ function setupManifest() {
 			id: "image4"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "check_button.png",
+			src: "images/check_button.png",
 			id: "check_button"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "check_button_pressed.png",
+			src: "images/check_button_pressed.png",
 			id: "check_button_pressed"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "check_button_disabled.png",
+			src: "images/check_button_disabled.png",
 			id: "check_button_disabled"
 		},
 		{
@@ -322,10 +241,6 @@ function setupManifest() {
 		{
 			src: "images/incorrect.png",
 			id: "incorrect"
-		},
-		{
-			src: "images/white_rect.jpg",
-			id: "white_rect"
 		}
 	];
 }
@@ -357,10 +272,6 @@ function handleFileLoad(event) {
 		correctScreen = new createjs.Bitmap(event.result);
 	} else if (event.item.id == "incorrect") {
 		incorrectScreen = new createjs.Bitmap(event.result);
-	} else if (event.item.id == "white_rect") {
-		for (var i = 0; i < 4; i++) {
-			whiteRectsArray.push(new createjs.Bitmap(event.result));
-		}
 	}
 }
 
