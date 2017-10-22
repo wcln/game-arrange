@@ -268,7 +268,7 @@ function compare(a, b) {
 
 ///////////////////////////////////// PRELOAD JS 
 
-var PATH_TO_QUESTION_IMAGES = "images/question_images/" + SUB_FOLDER + "/";
+var PATH_TO_QUESTION_IMAGES = "versions/" + SUB_FOLDER + "/";
 
 // bitmap variables
 var backgroundImage;
@@ -284,7 +284,7 @@ function setupManifest() {
 			id: "click"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "background.png",
+			src: "images/background.png",
 			id: "background"
 		},
 		{
@@ -304,15 +304,15 @@ function setupManifest() {
 			id: "image4"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "check_button.png",
+			src: "images/check_button.png",
 			id: "check_button"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "check_button_pressed.png",
+			src: "images/check_button_pressed.png",
 			id: "check_button_pressed"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "check_button_disabled.png",
+			src: "images/check_button_disabled.png",
 			id: "check_button_disabled"
 		},
 		{
