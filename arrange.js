@@ -125,9 +125,31 @@ function endGame(correct) {
 	})
 }
 
+/*
+ * Adds the mute and unmute buttons to the stage and defines listeners
+ */
+function initMuteUnMuteButtons() {
+	var hitArea = new createjs.Shape();
+	hitArea.graphics.beginFill("#000").drawRect(0, 0, muteButton.image.width, muteButton.image.height);
+	muteButton.hitArea = unmuteButton.hitArea = hitArea;
+
+	muteButton.x = unmuteButton.x = 0;
+	muteButton.y = unmuteButton.y = 0;
+
+	muteButton.cursor = "pointer";
+	unmuteButton.cursor = "pointer";
+
+	muteButton.on("click", toggleMute);
+	unmuteButton.on("click", toggleMute);
+
+	stage.addChild(muteButton);
+}
+
 function initGraphics() {
 	// background
 	stage.addChild(backgroundImage);
+
+  initMuteUnMuteButtons();
 
 	// check button
 	checkButton.x = 280;
@@ -163,7 +185,7 @@ function initGraphics() {
 
 		rect.alpha = 0;
 
-		stage.addChild(rect);	
+		stage.addChild(rect);
 
 	}
 
@@ -266,7 +288,7 @@ function compare(a, b) {
 	return 0;
 }
 
-///////////////////////////////////// PRELOAD JS 
+///////////////////////////////////// PRELOAD JS
 
 var PATH_TO_QUESTION_IMAGES = "versions/" + SUB_FOLDER + "/";
 
@@ -276,6 +298,9 @@ var checkButton, checkButtonPressed, checkButtonDisabled;
 var correctScreen, incorrectScreen;
 var questionImages = [];
 var whiteRectsArray = [];
+
+var muteButton, unmuteButton;
+
 
 function setupManifest() {
 	manifest = [
@@ -326,13 +351,21 @@ function setupManifest() {
 		{
 			src: "images/white_rect.jpg",
 			id: "white_rect"
-		}
+		},
+    {
+      src: "images/mute.png",
+      id: "mute"
+    },
+    {
+      src: "images/unmute.png",
+      id: "unmute"
+    }
 	];
 }
 
 function startPreload() {
 	preload = new createjs.LoadQueue(true);
-    preload.installPlugin(createjs.Sound);          
+    preload.installPlugin(createjs.Sound);
     preload.on("fileload", handleFileLoad);
     preload.on("progress", handleFileProgress);
     preload.on("complete", loadComplete);
@@ -361,6 +394,10 @@ function handleFileLoad(event) {
 		for (var i = 0; i < 4; i++) {
 			whiteRectsArray.push(new createjs.Bitmap(event.result));
 		}
+	} else if (event.item.id == "mute") {
+			muteButton = new createjs.Bitmap(event.result);
+	} else if (event.item.id == "unmute") {
+		unmuteButton = new createjs.Bitmap(event.result);
 	}
 }
 

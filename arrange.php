@@ -22,7 +22,6 @@
 	<canvas id="gameCanvas" width="500" height="700">
 		<!-- game will be rendered here -->
 	</canvas>
-	
-	<button id="mute" onClick="toggleMute()"><img style="width:16px; height:16px;" src="images/unmute.png"></img></button>
-</body>
+
+	</body>
 </html>
