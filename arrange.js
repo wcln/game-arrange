@@ -313,19 +313,19 @@ function setupManifest() {
 			id: "background"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "1.jpg",
+			src: PATH_TO_QUESTION_IMAGES + "4.jpg",
 			id: "image1"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "2.jpg",
+			src: PATH_TO_QUESTION_IMAGES + "3.jpg",
 			id: "image2"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "3.jpg",
+			src: PATH_TO_QUESTION_IMAGES + "2.jpg",
 			id: "image3"
 		},
 		{
-			src: PATH_TO_QUESTION_IMAGES + "4.jpg",
+			src: PATH_TO_QUESTION_IMAGES + "1.jpg",
 			id: "image4"
 		},
 		{
