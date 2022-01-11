@@ -1,7 +1,7 @@
 /**
- * BCLearningNetwork.com
+ * wcln.ca
  * Food Chains Quiz Game
- * @author Colin Bernard (colinjbernard@hotmail.com)
+ * @author Colin Perepelken (colin@perepelken.ca)
  * May 2017
  */
 
